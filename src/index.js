@@ -108,7 +108,36 @@ class Tree {
         return minValue
     }
 
+    find(value, current = this.root) {
+        // let current = this.root
+        // while (current != null) {
+        //     if (value < current.data) {
+        //         current = current.left
+        //     } else if (value > current.data) {
+        //         current = current.right
+        //     } else {
+        //         return current
+        //     }
+        // }
+        // return null
+
+        if (current == null) {
+            return null
+        }
+
+        if (value < current.data) {
+            return this.find(value, current.left)
+        } else if (value > current.data) {
+            return this.find(value, current.right)
+        } else {
+            return current
+        }
+
+    }
+
     
+
+
 }
 
 const prettyPrint = (node, prefix = "", isLeft = true) => {
@@ -128,7 +157,7 @@ const arr = [1, 7, 4, 23, 8, 9, 4, 3, 5, 7, 9, 67, 6345, 324]
 const video = [50,30,20,40,32,34,36,70,60,65,80,75,85]
 
 const t = new Tree(arr)
-t.delete(4)
+console.log(t.find(23423))
 prettyPrint(t.root)
 
 
