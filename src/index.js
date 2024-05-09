@@ -38,7 +38,6 @@ class Tree {
         let current = this.root
         let parent = null
         while (current != null) {
-            console.log(current)
             if (value < current.data) {
                 if (current.left == null) {
                     current.left = newNode
@@ -134,6 +133,107 @@ class Tree {
         }
 
     }
+    levelOrder(callback) {
+        let result = []
+        let queue = [this.root]
+        while (queue.length) {
+
+            let node = queue.shift()
+            result.push(node.data)
+
+            if (node.left) queue.push(node.left)
+            if (node.right) queue.push(node.right)
+        }
+        return result
+        
+    }
+
+    inOrder() {
+        let results = []
+        function traverse(node = this.root) {
+            if (node == null) {
+                return
+            }
+            traverse(node.left)
+            results.push(node.data)
+            traverse(node.right)
+        }
+        traverse(this.root)
+        return results
+      }
+
+      preOrder() {
+        let results = []
+        function traverse(node = this.root) {
+            if (node == null) {
+                return
+            }
+            results.push(node.data)
+            traverse(node.left)
+            traverse(node.right)
+        }
+        traverse(this.root)
+        return results
+      }
+
+      postOrder() {
+        let results = []
+        function traverse(node = this.root) {
+            if (node == null) {
+                return
+            }
+            traverse(node.left)
+            traverse(node.right)
+            results.push(node.data)
+        }
+        traverse(this.root)
+        return results
+      }
+
+      height(node) {
+        let height = -1
+
+        function traverse(node, current) {
+
+            if (current == null) {
+                return -1
+            }
+        
+            var leftHeight = traverse(node, current.left);
+    
+            var rightHeight = traverse(node, current.right);
+    
+        
+            var ans = Math.max(leftHeight, rightHeight) + 1;
+    
+       
+            if (current.data == node.data)
+                height = ans;
+    
+            return ans;
+        }
+        traverse(node, this.root)
+        return height
+    }
+
+    depth(node) {
+        return this.height(this.root) - this.height(node)
+    }
+
+    isBalanced() {
+        const leftHeight = this.height(this.root.left)
+        const rightHeight = this.height(this.root.right)
+        if (Math.abs(leftHeight - rightHeight) <= 1) {
+            return true
+        }
+        return false
+    }
+
+    reBalance() {
+        const arr = this.preOrder()
+        this.root = this.buildTree(arr)
+    }
+      
 
     
 
@@ -153,12 +253,48 @@ const prettyPrint = (node, prefix = "", isLeft = true) => {
     }
   };
 
+function generateArray() {
+    let arr = []
+    for (let i = 0; i < 20; i++) {
+        arr.push(Math.floor(Math.random() * 100))
+    }
+    return arr
+}
+
 const arr = [1, 7, 4, 23, 8, 9, 4, 3, 5, 7, 9, 67, 6345, 324]
 const video = [50,30,20,40,32,34,36,70,60,65,80,75,85]
+const randArray = generateArray()
 
-const t = new Tree(arr)
-console.log(t.find(23423))
-prettyPrint(t.root)
+const t = new Tree(randArray)
+
+function driver() {
+    prettyPrint(t.root)
+
+    console.log(`Is Balanced? ${t.isBalanced()}`)
+    console.log(`level: ${t.levelOrder()}`)
+    console.log(`pre: ${t.preOrder()}`)
+    console.log(`post: ${t.postOrder()}`)
+    console.log(`inorder: ${t.inOrder()}`)
+
+    // Unbalance the tree
+    t.insert(101)
+    t.insert(102)
+    t.insert(103)
+
+    prettyPrint(t.root)
+    console.log(`Is Balanced? ${t.isBalanced()}`)
+    t.reBalance()
+    prettyPrint(t.root)
+    console.log(`Is Balanced? ${t.isBalanced()}`)
+
+    console.log(`level: ${t.levelOrder()}`)
+    console.log(`pre: ${t.preOrder()}`)
+    console.log(`post: ${t.postOrder()}`)
+    console.log(`inorder: ${t.inOrder()}`)
+}
+
+driver()
+
 
 
 
